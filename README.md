@@ -136,6 +136,87 @@ VALUES
 	('NK','Spirit Air Lines'),
 	('UA','United Air Lines'),
 	('VX','Virgin America'),
-	('WN','Southwest Airlines');	
+	('WN','Southwest Airlines');
+	
+	
+select p.fl_date ,
+		p.mkt_carrier,
+		cc.carrier_desc as airline,
+		p.mkt_carrier_fl_num  as flight,
+		p.origin_city_name ,
+		p.dest_city_name 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code ;
+	
+	
+select p.fl_date ,
+		p.mkt_carrier,
+		cc.carrier_desc as airline,
+		p.mkt_carrier_fl_num  as flight,
+		p.origin_city_name ,
+		p.dest_city_name ,
+		p.cancellation_code,
+		ca.cancel_desc 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+left join codes_cancellation ca 
+	on p.cancellation_code =ca.cancellation_code ;
 ```
+----
+
+# Presenting and Aggregating Your Result
+
+```sql
+select mkt_carrier , 
+		avg(dep_delay_new) 
+from performance p 
+group by mkt_carrier ;
+
+
+select p.mkt_carrier , 
+	   cc.carrier_desc ,
+		avg(p.dep_delay_new) 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+group by p.mkt_carrier,
+		cc.carrier_desc ;
+		
+	
+select p.mkt_carrier , 
+	   cc.carrier_desc ,
+		avg(p.dep_delay_new) 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+group by p.mkt_carrier,
+		cc.carrier_desc 
+order by avg(p.dep_delay_new) desc;
+
+
+select p.mkt_carrier , 
+	   cc.carrier_desc ,
+		avg(p.dep_delay_new) as departure_delay,
+		avg(p.arr_delay_new) as arrival_delay 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+group by p.mkt_carrier,
+		cc.carrier_desc 
+order by avg(p.dep_delay_new) desc;
+
+
+select p.mkt_carrier , 
+	   cc.carrier_desc ,
+		avg(p.dep_delay_new) as departure_delay,
+		avg(p.arr_delay_new) as arrival_delay 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+group by p.mkt_carrier,
+		cc.carrier_desc 
+having avg(p.dep_delay_new) > 15
+	   and	avg(p.arr_delay_new) > 15; 
 ```
