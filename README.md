@@ -219,4 +219,60 @@ group by p.mkt_carrier,
 		cc.carrier_desc 
 having avg(p.dep_delay_new) > 15
 	   and	avg(p.arr_delay_new) > 15; 
+	   
+	   
+	   
+select avg(dep_delay_new) as average_delay 
+from performance p 
+where origin = 'OMA';
+
+
+select  p.mkt_carrier ,
+		cc.carrier_desc ,
+		avg(p.dep_delay_new) as average_delay 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+where p.origin = 'OMA'
+group by p.mkt_carrier ,
+		cc.carrier_desc ;
+		
+		
+select  p.mkt_carrier ,
+		cc.carrier_desc ,
+		avg(p.dep_delay_new) as average_delay 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+where p.origin = 'OMA'
+	and p.dep_delay_new <> 0
+group by p.mkt_carrier ,
+		cc.carrier_desc ;
+		
+		
+select  p.mkt_carrier ,
+		cc.carrier_desc ,
+		avg(p.dep_delay_new) as average_delay 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+where p.origin = 'OMA'
+	and p.dep_delay_new <> 0
+group by p.mkt_carrier ,
+		cc.carrier_desc 
+order by avg(p.dep_delay_new) ;		
+
+
+select  p.mkt_carrier ,
+		cc.carrier_desc ,
+		avg(p.dep_delay_new) as average_delay 
+from performance p 
+inner join codes_carrier cc 
+	on p.mkt_carrier = cc.carrier_code 
+where p.origin = 'OMA'
+	and p.dep_delay_new <> 0
+group by p.mkt_carrier ,
+		cc.carrier_desc 
+having avg(p.dep_delay_new) > 49 
+order by avg(p.dep_delay_new) ;
 ```
